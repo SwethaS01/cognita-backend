@@ -12,7 +12,7 @@ if (isProd && (!process.env.JWT_SECRET || process.env.JWT_SECRET === 'change_thi
 
 // Local dev origins + CLIENT_URL. In production the frontend is served by this same server,
 // so any request whose Origin host equals the Host header (same-origin) is allowed too.
-const allowedOrigins = [process.env.CLIENT_URL, 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://127.0.0.1:5173'].filter(Boolean);
+const allowedOrigins = [process.env.CLIENT_URL, 'https://cognitanexus.netlify.app', 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://127.0.0.1:5173'].filter(Boolean);
 const corsDelegate = (req, cb) => {
   const origin = req.headers.origin;
   let ok = !origin || allowedOrigins.includes(origin);
@@ -70,4 +70,4 @@ io.on('connection', socket => {
 });
 
 app.use(error);
-server.listen(process.env.PORT || 5000, () => console.log('API running on ' + (process.env.PORT || 5000)));
+server.listen(process.env.PORT || 5000, "0.0.0.0", () => console.log('API running on ' + (process.env.PORT || 5000)));
