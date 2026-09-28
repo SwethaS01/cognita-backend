@@ -10,15 +10,6 @@ if (isProd && (!process.env.JWT_SECRET || process.env.JWT_SECRET === 'change_thi
   console.error('JWT_SECRET must be set to a long random value in production.'); process.exit(1);
 }
 
-// Local dev origins + CLIENT_URL. In production the frontend is served by this same server,
-// so any request whose Origin host equals the Host header (same-origin) is allowed too.
-const allowedOrigins = [process.env.CLIENT_URL, 'https://cognitanexus.netlify.app', 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://127.0.0.1:5173'].filter(Boolean);
-const corsDelegate = (req, cb) => {
-  const origin = req.headers.origin;
-  let ok = !origin || allowedOrigins.includes(origin);
-  if (!ok) { try { ok = new URL(origin).host === req.headers.host; } catch (_) {} }
-  cb(null, { origin: ok, credentials: true });
-};
 
 connectDB()
   .then(async () => { await ensureAdmin(); await syncRoles(); })
@@ -28,7 +19,11 @@ const app = express();
 app.set('trust proxy', 1);
 const server = http.createServer(app);
 const io = new Server(server, { cors: { origin: true, methods: ['GET', 'POST'] } });
-app.use(cors(corsDelegate));
+app.use(cors({
+  origin: "https://cognitanexus.netlify.app",
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  credentials: true
+}));
 app.use(express.json({ limit: '1mb' }));
 
 app.get('/api/health', (req, res) => res.json({ ok: true }));
