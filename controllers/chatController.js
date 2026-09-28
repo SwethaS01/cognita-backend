@@ -1,0 +1,6 @@
+const Conversation=require('../models/Conversation');
+const Message=require('../models/Message');
+const User=require('../models/User');
+exports.conversations=async(req,res,next)=>{try{const rows=await Conversation.find({participants:req.user._id}).populate('participants','name role profileImage').sort('-updatedAt');res.json(rows)}catch(e){next(e)}};
+exports.create=async(req,res,next)=>{try{const {userId}=req.body;if(!userId)return res.status(400).json({message:'userId is required'});if(String(userId)===String(req.user._id))return res.status(400).json({message:'You cannot chat with yourself'});const target=await User.findById(userId);if(!target)return res.status(404).json({message:'User not found'});let c=await Conversation.findOne({participants:{$all:[req.user._id,userId],$size:2}}).populate('participants','name role profileImage');if(!c)c=await Conversation.create({participants:[req.user._id,userId]});res.status(201).json(await c.populate('participants','name role profileImage'))}catch(e){next(e)}};
+exports.messages=async(req,res,next)=>{try{const c=await Conversation.findOne({_id:req.params.id,participants:req.user._id});if(!c)return res.status(404).json({message:'Conversation not found'});res.json(await Message.find({conversation:c._id}).populate('sender','name role').sort('createdAt'))}catch(e){next(e)}};

@@ -1,0 +1,1 @@
+const r=require('express').Router(),c=require('../controllers/experienceController'),{protect,roles}=require('../middleware/auth');r.get('/',protect,c.list);r.post('/',protect,roles('senior','alumni','admin'),c.create);r.delete('/:id',protect,roles('admin'),c.remove);module.exports=r;

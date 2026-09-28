@@ -1,0 +1,3 @@
+const mongoose=require('mongoose');
+const schema=new mongoose.Schema({company:{type:String,required:true},role:String,type:{type:String,enum:['placement','internship']},eligibility:String,selectionProcess:String,rounds:[String],technicalQuestions:[String],hrQuestions:[String],tips:String,experience:String,postedBy:{type:mongoose.Schema.Types.ObjectId,ref:'User'},status:{type:String,enum:['pending','approved','removed'],default:'approved'}},{timestamps:true});
+module.exports=mongoose.model('Experience',schema);

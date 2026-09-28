@@ -1,0 +1,1 @@
+const r=require('express').Router(),c=require('../controllers/userController'),{protect,roles}=require('../middleware/auth');r.get('/mentors',protect,c.mentors);r.get('/directory',protect,c.directory);r.get('/',protect,roles('admin'),c.list);r.patch('/:id/toggle',protect,roles('admin'),c.toggle);r.patch('/:id',protect,c.update);r.get('/:id',protect,c.getOne);module.exports=r;

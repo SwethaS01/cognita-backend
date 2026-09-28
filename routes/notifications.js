@@ -1,0 +1,1 @@
+const r=require('express').Router(),c=require('../controllers/notificationController'),{protect,roles}=require('../middleware/auth');r.get('/',protect,c.list);r.patch('/read',protect,c.read);r.post('/broadcast',protect,roles('admin'),c.adminCreate);module.exports=r;

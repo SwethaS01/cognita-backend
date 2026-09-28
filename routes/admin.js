@@ -1,0 +1,12 @@
+const r=require('express').Router(),c=require('../controllers/adminController'),{protect,roles}=require('../middleware/auth');
+r.use(protect,roles('admin'));
+r.get('/stats',c.stats);
+r.get('/users',c.users);
+r.patch('/users/:id/toggle',c.toggleUser);
+r.get('/reports',c.reports);
+r.patch('/reports/:id',c.resolveReport);
+r.get('/content',c.content);
+r.patch('/content/:type/:id',c.moderate);
+r.get('/activity',c.activity);
+r.get('/profile',c.profile);
+module.exports=r;

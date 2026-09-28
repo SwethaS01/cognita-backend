@@ -1,0 +1,5 @@
+const AdminActivity=require('../models/AdminActivity');
+const Notification=require('../models/Notification');
+exports.list=async(req,res,next)=>{try{res.json(await Notification.find({user:req.user._id}).sort('-createdAt'))}catch(e){next(e)}};
+exports.read=async(req,res,next)=>{try{await Notification.updateMany({user:req.user._id,read:false},{read:true});res.json({message:'Marked as read'})}catch(e){next(e)}};
+exports.adminCreate=async(req,res,next)=>{try{const User=require('../models/User');const users=await User.find({isActive:true}).select('_id');const docs=users.map(u=>({...req.body,user:u._id}));await Notification.insertMany(docs);await AdminActivity.create({admin:req.user._id,action:'SEND_ANNOUNCEMENT',description:`Sent announcement to ${docs.length} active users`});res.status(201).json({count:docs.length})}catch(e){next(e)}};

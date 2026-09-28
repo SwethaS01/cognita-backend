@@ -1,0 +1,4 @@
+const Experience=require('../models/Experience');
+exports.list=async(req,res,next)=>{try{const f={status:'approved'};if(req.query.type)f.type=req.query.type;if(req.query.search)f.company={$regex:req.query.search,$options:'i'};res.json(await Experience.find(f).populate('postedBy','name role').sort('-createdAt'))}catch(e){next(e)}};
+exports.create=async(req,res,next)=>{try{const x=await Experience.create({...req.body,postedBy:req.user._id});res.status(201).json(x)}catch(e){next(e)}};
+exports.remove=async(req,res,next)=>{try{await Experience.findByIdAndUpdate(req.params.id,{status:'removed'});res.json({message:'Experience removed'})}catch(e){next(e)}};
