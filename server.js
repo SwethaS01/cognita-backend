@@ -40,6 +40,7 @@ app.use('/api/connections', require('./routes/connections'));
 app.use('/api/posts', require('./routes/posts'));
 app.use('/api/reports', require('./routes/reports'));
 app.use('/api/files', require('./routes/files'));
+app.use('/api/mentor', require('./routes/mentor'));
 app.use('/api', (req, res) => res.status(404).json({ message: 'Not found' }));
 
 // Serve the built React app (frontend/dist) from the same server -> one URL to host & share
