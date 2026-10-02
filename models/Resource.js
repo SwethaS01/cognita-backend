@@ -1,3 +1,23 @@
-const mongoose=require('mongoose');
-const schema=new mongoose.Schema({title:{type:String,required:true},description:String,subject:String,department:String,semester:String,type:String,tags:[String],fileUrl:String,fileId:{type:mongoose.Schema.Types.ObjectId,ref:'File'},fileName:String,fileSize:Number,mimeType:String,uploadedBy:{type:mongoose.Schema.Types.ObjectId,ref:'User'},status:{type:String,enum:['pending','approved','removed'],default:'approved'}},{timestamps:true});
-module.exports=mongoose.model('Resource',schema);
+const mongoose = require('mongoose');
+
+const schema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: String,
+  subject: String,
+  department: String,
+  semester: String,
+  type: String,
+  category: String,
+  tags: [String],
+  fileUrl: String,
+  fileId: { type: mongoose.Schema.Types.ObjectId, ref: 'File' },
+  fileName: String,
+  fileSize: Number,
+  mimeType: String,
+  uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  status: { type: String, enum: ['pending', 'approved', 'removed'], default: 'approved' },
+  upvotes: { type: Number, default: 0 },
+  downvotes: { type: Number, default: 0 }
+}, { timestamps: true });
+
+module.exports = mongoose.model('Resource', schema);

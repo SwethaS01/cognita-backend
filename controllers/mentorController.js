@@ -73,11 +73,24 @@ exports.findMentorsBySkill = async (req, res, next) => {
   }
 };
 
+// Get all active mentors
+exports.getAllMentors = async (req, res, next) => {
+  try {
+    const profiles = await MentorProfile.find({
+      isActive: true
+    }).populate('user', 'name department year role profileImage bio skills interests');
+
+    res.json(profiles);
+  } catch (e) {
+    next(e);
+  }
+};
+
 // Get mentor profile by ID
 exports.getMentorProfile = async (req, res, next) => {
   try {
     const profile = await MentorProfile.findOne({ user: req.params.id })
-      .populate('user', 'name department year role profileImage bio skills interests collegeId');
+      .populate('user', 'name department year role profileImage bio skills interests collegeId projects certifications placementExperience');
     
     if (!profile) {
       return res.status(404).json({ message: 'Mentor profile not found' });

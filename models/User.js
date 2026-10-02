@@ -1,4 +1,38 @@
 const mongoose=require('mongoose');
-const schema=new mongoose.Schema({name:{type:String,required:true},email:{type:String,required:true,unique:true,lowercase:true},collegeId:{type:String,trim:true,uppercase:true},password:{type:String,required:true},role:{type:String,enum:['junior','senior','alumni','admin'],default:'junior'},department:String,year:String,college:{type:String,default:'SA Engineering College'},bio:String,skills:[String],interests:[String],profileImage:String,resetPasswordToken:String,resetPasswordExpires:Date,isActive:{type:Boolean,default:true}},{timestamps:true});
+const schema=new mongoose.Schema({
+  name:{type:String,required:true},
+  email:{type:String,required:true,unique:true,lowercase:true},
+  collegeId:{type:String,trim:true,uppercase:true},
+  password:{type:String,required:true},
+  role:{type:String,enum:['junior','senior','alumni','admin'],default:'junior'},
+  department:String,
+  year:String,
+  college:{type:String,default:'SA Engineering College'},
+  bio:String,
+  skills:[String],
+  interests:[String],
+  profileImage:String,
+  projects:[{
+    title:String,
+    description:String,
+    techStack:[String],
+    link:String
+  }],
+  certifications:[{
+    name:String,
+    issuer:String,
+    date:String,
+    link:String
+  }],
+  placementExperience:{
+    company:String,
+    role:String,
+    package:String,
+    year:String
+  },
+  resetPasswordToken:String,
+  resetPasswordExpires:Date,
+  isActive:{type:Boolean,default:true}
+},{timestamps:true});
 schema.index({collegeId:1},{unique:true,sparse:true});
 module.exports=mongoose.model('User',schema);
